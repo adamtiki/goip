@@ -1,0 +1,25 @@
+version: "3.9"
+
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: 12m
+    max-file: 5
+
+volumes:
+  goip-sms-server-data:
+
+services:
+  goip-sms-server:
+    image: doanbaanh/goip-sms-server:latest
+    build:
+      context: .
+      dockerfile: .docker/Dockerfile
+    container_name: goip-sms-server
+    ports:
+      - "80:80"
+      - "44444:44444/udp"
+    volumes:
+      - goip-sms-server-data:/var/lib/mysql
+    restart: unless-stopped
+    logging: *default-logging
